@@ -22,7 +22,7 @@ colors = {
 
 class SMPLRenderer(object):
     def __init__(self,
-                 img_size=224,
+                 img_size=256,
                  flength=500.,
                  face_path="tf_smpl/smpl_faces.npy"):
         self.faces = np.load(face_path)
@@ -237,7 +237,7 @@ def render_model(verts,
 
 
 def get_original(proc_param, verts, cam, joints, img_size):
-    img_size = proc_param['img_size']
+    img_size = proc_param['img_size'] # 224 x 224
     undo_scale = 1. / np.array(proc_param['scale'])
 
     cam_s = cam[0]
@@ -259,7 +259,7 @@ def get_original(proc_param, verts, cam, joints, img_size):
     margin = int(img_size / 2)
     kp_original = (joints + proc_param['start_pt'] - margin) * undo_scale
 
-    return cam_for_render, vert_shifted, kp_original
+    return cam_for_render, vert_shifted, kp_original, trans
 
 
 def draw_skeleton(input_image, joints, draw_edges=True, vis=None, radius=None):

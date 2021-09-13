@@ -26,16 +26,15 @@ Download these datasets somewhere.
 - [COCO](http://cocodataset.org/#download) we used 2014 Train. You also need to
   install the [COCO API](https://github.com/cocodataset/cocoapi) for python.
 - [MPII](http://human-pose.mpi-inf.mpg.de/#download)
-- [MPI-INF-3DHP](http://gvv.mpi-inf.mpg.de/3dhp-dataset/)
-- [Human3.6M](http://vision.imar.ro/human3.6m/description.php)
+- [MPI-INF-3DHP](http://human-pose.mpi-inf.mpg.de/#download)
 
-~For Human3.6M, download the pre-computed tfrecords [here]().
-Note that this is 11GB! I advice you do this in a directly outside of the HMR code base.~
-_The distribution of pre-computed Human3.6M tfrecord ended as of April 4th 2019, following their license agreement. The distribution of the data was not permitted at any time by the license or by the copyright holders. If you have obtained the data through our link prior to this date, please note that you must follow the original [license agreement](http://vision.imar.ro/human3.6m/eula.php). Please download the
-dataset directly from [their website](http://vision.imar.ro/human3.6m/description.php) and follow their [license agreement](http://vision.imar.ro/human3.6m/eula.php)._
+For Human3.6M, download the pre-computed tfrecords [here](https://drive.google.com/file/d/14RlfDlREouBCNsR1QGDP0qpOUIu5LlV5/view?usp=sharing).
+Note that this is 9.1GB! I advice you do this in a directly outside of the HMR code base.
+```
+wget https://angjookanazawa.com/cachedir/hmr/tf_records_human36m.tar.gz
+```
 
-
-If you use the datasets above, please cite the original papers and follow the individual license agreement.
+If you use these datasets, please consider citing them.
 
 ## Mosh Data. 
 We provide the MoShed data using the neutral SMPL model.
@@ -108,31 +107,3 @@ Setup tensorboard to this directory to monitor the training progress like so:
 It's important to visually monitor the training! Make sure that the images
 loaded look right.
 
-
-## Evaluation
-Provided is an evaluation code for Human3.6M. It uses the test tf_records,
-provided with the training tf_records available above and ~[here]~ 
-_As of April 4th 2019, we do not make pre-computed tfrecords available for
-Human3.6M due to the request from the authors of Human3.6M. Please download the
-dataset directly from their website._
-
-To evaluate a model, run
-```
-python -m src.benchmark.evaluate_h36m --batch_size=500
---load_path=<model_to_eval.ckpt> --tfh36m_dir <path to tf_records_human36m_wjoints/>
-```
-for example for the provided model, use:
-```
-python -m src.benchmark.evaluate_h36m --batch_size=500
---load_path=models/model.ckpt-667589 --tfh36m_dir <path to tf_records_human36m_wjoints/>
-```
-
-This writes intermediate output to a temp directory, which you can specify by pred_dir
-With the provided model, this outputs errors per action and overall MPE for P1
-(corresponding to Table 2 in paper -- this retrained model gets slightly lower
-MPJPE and a comparable PA-MPJPE):
-```
-MPJPE: 86.20, PA-MPJPE: 58.47, Median: 79.47, PA-Median: 52.95
-```
-
-Run it with `--vis` option, it visualizes the top/worst 30 results. 

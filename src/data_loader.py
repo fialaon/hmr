@@ -76,7 +76,7 @@ class DataLoader(object):
         """
         files = data_utils.get_all_files(self.dataset_dir, self.datasets)
 
-        do_shuffle = True
+        do_shuffle = self.split is 'train'
         fqueue = tf.train.string_input_producer(
             files, shuffle=do_shuffle, name="input")
         image, label = self.read_data(fqueue, has_3d=False)
@@ -287,9 +287,6 @@ class DataLoader(object):
             # Randomly shift center.
             print('Using translation jitter: %d' % self.trans_max)
             center = data_utils.jitter_center(center, self.trans_max)
-            # randomly scale image.
-            image, keypoints, center = data_utils.jitter_scale(
-                image, image_size, keypoints, center, self.scale_range)
 
             # Pad image with safe margin.
             # Extra 50 for safety.

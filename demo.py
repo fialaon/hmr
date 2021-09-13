@@ -1,7 +1,7 @@
 """
 Demo of HMR.
 
-Note that HMR requires the bounding box of the person in the image. The best performance is obtained when max length of the person in the image is roughly 150px. 
+Note that HMR requires the bounding box of the person in the image. The best performance is obtained when max length of the person in the image is roughly 150px.
 
 When only the image path is supplied, it assumes that the image is centered on a person whose length is roughly 150px.
 Alternatively, you can supply output of the openpose to figure out the bbox and the right scale factor.
@@ -42,7 +42,7 @@ def visualize(img, proc_param, joints, verts, cam):
     """
     Renders the result in original image coordinate frame.
     """
-    cam_for_render, vert_shifted, joints_orig = vis_util.get_original(
+    cam_for_render, vert_shifted, joints_orig, trans = vis_util.get_original(
         proc_param, verts, cam, joints, img_size=img.shape[:2])
 
     # Render results
@@ -92,15 +92,9 @@ def visualize(img, proc_param, joints, verts, cam):
 
 def preprocess_image(img_path, json_path=None):
     img = io.imread(img_path)
-    if img.shape[2] == 4:
-        img = img[:, :, :3]
 
     if json_path is None:
-        if np.max(img.shape[:2]) != config.img_size:
-            print('Resizing so the max image size is %d..' % config.img_size)
-            scale = (float(config.img_size) / np.max(img.shape[:2]))
-        else:
-            scale = 1.
+        scale = 1.
         center = np.round(np.array(img.shape[:2]) / 2).astype(int)
         # image center in (x,y)
         center = center[::-1]
@@ -124,10 +118,6 @@ def main(img_path, json_path=None):
     # Add batch dimension: 1 x D x D x 3
     input_img = np.expand_dims(input_img, 0)
 
-    # Theta is the 85D vector holding [camera, pose, shape]
-    # where camera is 3D [s, tx, ty]
-    # pose is 72D vector holding the rotation of 24 joints of SMPL in axis angle format
-    # shape is 10D shape coefficients of SMPL
     joints, verts, cams, joints3d, theta = model.predict(
         input_img, get_theta=True)
 

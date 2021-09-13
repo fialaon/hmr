@@ -1,4 +1,4 @@
-""" 
+"""
 Util functions implementing the camera
 
 @@batch_orth_proj_idrot

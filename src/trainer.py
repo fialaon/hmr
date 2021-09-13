@@ -212,7 +212,6 @@ class HMRTrainer(object):
         # For discriminator
         fake_rotations, fake_shapes = [], []
         # Start loop
-        # 85D
         theta_prev = self.load_mean_param()
 
         # For visualizations
@@ -222,7 +221,6 @@ class HMRTrainer(object):
         self.all_delta_thetas = []
         self.all_theta_prev = []
 
-        # Main IEF loop
         for i in np.arange(self.num_stage):
             print('Iteration %d' % i)
             # ---- Compute outputs
@@ -287,7 +285,7 @@ class HMRTrainer(object):
                 self.e_loss_3d = loss_3d_params[-1]
                 self.e_loss_3d_joints = loss_3d_joints[-1]
 
-                self.e_loss += (self.e_loss_3d + self.e_loss_3d_joints)
+            self.e_loss += (self.e_loss_3d + self.e_loss_3d_joints)
 
         if not self.encoder_only:
             with tf.name_scope("gather_d_loss"):
